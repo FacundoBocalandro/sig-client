@@ -4,7 +4,7 @@ import {useLocation} from "react-router-dom";
 export const NavItem = (props) => {
     const { href, icon, title, ...others } = props;
     const location = useLocation();
-    const active = href ? (location.pathname === href) : false;
+    const active = href ? location.pathname.startsWith(href) : false;
 
     return (
         <ListItem

@@ -34,3 +34,9 @@ export const calculateFullAgeString = (dob) => {
     }
     return age.trim();
 }
+
+export const getEstimatedBirthDate = (pregnancyDate) => {
+    const birthDate = new Date(pregnancyDate);
+    birthDate.setDate(birthDate.getDate() + 84);
+    return birthDate;
+}

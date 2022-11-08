@@ -12,8 +12,36 @@ import {
     TableRow,
     Typography
 } from '@mui/material';
+import {useNavigate} from "react-router-dom";
+import {StatusPill} from "./StatusPill";
+import toast from "react-hot-toast";
+
+export const PIG_STATUS = {
+    CUB: "CUB",
+    IN_CYCLE: "IN_CYCLE",
+    PREGNANT: "PREGNANT",
+    RECENT_BIRTH: "RECENT_BIRTH",
+    DISCARDED: "DISCARDED"
+}
+
+const STATUS_COLORS = {
+    CUB: "secondary",
+    IN_CYCLE: "info",
+    PREGNANT: "success",
+    RECENT_BIRTH: "warning",
+    DISCARDED: "error"
+}
+
+const STATUS_LABELS = {
+    CUB: "Cachorra",
+    IN_CYCLE: "En ciclo",
+    PREGNANT: "Preñada",
+    RECENT_BIRTH: "Parto reciente",
+    DISCARDED: "Descartada"
+}
 
 export const PigList = ({ pigs, ...rest }) => {
+    const navigate = useNavigate();
     const [limit, setLimit] = useState(20);
     const [page, setPage] = useState(0);
 
@@ -39,13 +67,13 @@ export const PigList = ({ pigs, ...rest }) => {
                                     Edad
                                 </TableCell>
                                 <TableCell width={'20%'}>
-                                    Padre
-                                </TableCell>
-                                <TableCell width={'20%'}>
                                     Genéticas
                                 </TableCell>
                                 <TableCell width={'20%'}>
                                     Fecha de ingreso
+                                </TableCell>
+                                <TableCell width={'20%'}>
+                                    Estado
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -54,6 +82,17 @@ export const PigList = ({ pigs, ...rest }) => {
                                 <TableRow
                                     hover
                                     key={pig.id}
+                                    onClick={() => {
+                                        if (pig.pigStatus !== PIG_STATUS.DISCARDED) {
+                                            navigate(`/cerdas/${pig.id}`)
+                                        } else toast.error("¡La cerda está descartada!")
+
+                                    }}
+                                    sx={{
+                                        "&:hover": {
+                                            cursor: pig.pigStatus === PIG_STATUS.DISCARDED ? 'auto' : "pointer",
+                                        }
+                                    }}
                                 >
                                     <TableCell>
                                         <Box
@@ -74,13 +113,17 @@ export const PigList = ({ pigs, ...rest }) => {
                                         {pig.age}
                                     </TableCell>
                                     <TableCell>
-                                        {pig.fatherId}
-                                    </TableCell>
-                                    <TableCell>
                                         {pig.genetics}
                                     </TableCell>
                                     <TableCell>
                                         {format(new Date(pig.created_at), 'dd/MM/yyyy')}
+                                    </TableCell>
+                                    <TableCell>
+                                        <StatusPill
+                                            color={STATUS_COLORS[pig.pigStatus]}
+                                        >
+                                            {STATUS_LABELS[pig.pigStatus]}
+                                        </StatusPill>
                                     </TableCell>
                                 </TableRow>
                             ))}

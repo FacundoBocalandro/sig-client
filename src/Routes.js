@@ -7,6 +7,7 @@ import Login from "./login/Login";
 import Register from "./register/Register";
 import Home from "./home/Home";
 import Pigs from "./pigs/Pigs";
+import PigDetails from "./pigs/pig-details/PigDetails";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: '/cerdas',
     element: <Pigs/>
+  },
+  {
+    path: '/cerdas/:id',
+    element: <PigDetails/>
   }
 ]);
 
