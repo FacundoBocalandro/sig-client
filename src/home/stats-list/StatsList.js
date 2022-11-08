@@ -44,13 +44,16 @@ export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell width={'10%'}>
+                                    <TableCell width={'10%'} sx={{position: 'sticky', left: 0, zIndex: 1, background: '#F3F4F6'}}>
                                         KPI
                                     </TableCell>
-                                    {stats.map(stat => (<TableCell width={'8%'} key={stat.endDate}>
+                                    {stats.statsPerWeek.map(stat => (<TableCell width={'7%'} key={stat.endDate}>
                                         {format(new Date(stat.endDate), 'dd/MM/yy')}
                                     </TableCell>))}
-                                    <TableCell width={'10%'}>
+                                    <TableCell width={'10%'} sx={{position: 'sticky', right: '10%', zIndex: 1, background: '#F3F4F6'}}>
+                                        Promedio
+                                    </TableCell>
+                                    <TableCell width={'10%'} sx={{position: 'sticky', right: 0, zIndex: 1, background: '#F3F4F6'}}>
                                         Objetivo
                                     </TableCell>
                                 </TableRow>
@@ -58,10 +61,11 @@ export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
                             <TableBody>
                                 {KPIS.map(kpi => (
                                     <TableRow>
-                                        <TableCell><b>{kpi.label}</b></TableCell>
-                                        {stats.map(stat => (
+                                        <TableCell sx={{position: 'sticky', left: 0, zIndex: 1, background: '#fff'}}><b>{kpi.label}</b></TableCell>
+                                        {stats.statsPerWeek.map(stat => (
                                             <TableCell align={"center"}>{stat[kpi.accessor]}</TableCell>))}
-                                        <TableCell>
+                                        <TableCell align={"center"} sx={{position: 'sticky', right: '10%', zIndex: 1, background: '#fff'}}>{stats.average[kpi.accessor]}</TableCell>
+                                        <TableCell sx={{position: 'sticky', right: 0, zIndex: 1, background: '#fff'}}>
                                             <TextField
                                                 fullWidth
                                                 variant={"outlined"}

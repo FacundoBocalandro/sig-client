@@ -20,7 +20,7 @@ const Home = () => {
             get('dashboard/stats')
                 .then(res => {
                     setLoading(false)
-                    setStats(res.sort(() => -1));
+                    setStats({...res, statsPerWeek: res.statsPerWeek.sort(() => -1)});
                 })
                 .catch(() => {
                     setLoading(false)
