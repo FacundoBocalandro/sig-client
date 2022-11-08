@@ -8,6 +8,7 @@ import Register from "./register/Register";
 import Home from "./home/Home";
 import Pigs from "./pigs/Pigs";
 import PigDetails from "./pigs/pig-details/PigDetails";
+import NotFoundScreen from "./not-found/NotFoundScreen";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: '/cerdas/:id',
     element: <PigDetails/>
+  },
+  {
+    path: '*',
+    element: <NotFoundScreen/>
   }
 ]);
 

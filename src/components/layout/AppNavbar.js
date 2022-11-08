@@ -1,18 +1,17 @@
-import { useRef, useState } from 'react';
+import {useRef, useState} from 'react';
 import styled from '@emotion/styled';
-import { AppBar, Avatar, Box, IconButton, Toolbar, Tooltip } from '@mui/material';
+import {AppBar, Avatar, Box, IconButton, Toolbar} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import { UserCircle as UserCircleIcon } from '../../icons/UserCircle';
-import { AccountPopover } from './AccountPopover';
+import {UserCircle as UserCircleIcon} from '../../icons/UserCircle';
+import {AccountPopover} from './AccountPopover';
 
-const AppNavbarRoot = styled(AppBar)(({ theme }) => ({
+const AppNavbarRoot = styled(AppBar)(({theme}) => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[3]
 }));
 
 export const AppNavbar = (props) => {
-    const { onSidebarOpen, ...other } = props;
+    const {onSidebarOpen, ...other} = props;
     const settingsRef = useRef(null);
     const [openAccountPopover, setOpenAccountPopover] = useState(false);
 
@@ -42,33 +41,12 @@ export const AppNavbar = (props) => {
                             display: {
                                 xs: 'inline-flex',
                                 lg: 'none'
-                            }
+                            },
                         }}
                     >
-                        <MenuIcon fontSize="small" />
+                        <MenuIcon fontSize="small"/>
                     </IconButton>
-                    <Tooltip title="Search">
-                        <IconButton sx={{ ml: 1 }}>
-                            <SearchIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
-                    <Box sx={{ flexGrow: 1 }} />
-                    {/*<Tooltip title="Contacts">*/}
-                    {/*    <IconButton sx={{ ml: 1 }}>*/}
-                    {/*        <UsersIcon fontSize="small" />*/}
-                    {/*    </IconButton>*/}
-                    {/*</Tooltip>*/}
-                    {/*<Tooltip title="Notifications">*/}
-                    {/*    <IconButton sx={{ ml: 1 }}>*/}
-                    {/*        <Badge*/}
-                    {/*            badgeContent={4}*/}
-                    {/*            color="primary"*/}
-                    {/*            variant="dot"*/}
-                    {/*        >*/}
-                    {/*            <BellIcon fontSize="small" />*/}
-                    {/*        </Badge>*/}
-                    {/*    </IconButton>*/}
-                    {/*</Tooltip>*/}
+                    <Box sx={{flexGrow: 1}}/>
                     <Avatar
                         onClick={() => setOpenAccountPopover(true)}
                         ref={settingsRef}
@@ -80,7 +58,7 @@ export const AppNavbar = (props) => {
                         }}
                         src="/static/images/avatars/avatar_1.png"
                     >
-                        <UserCircleIcon fontSize="small" />
+                        <UserCircleIcon fontSize="small"/>
                     </Avatar>
                 </Toolbar>
             </AppNavbarRoot>
