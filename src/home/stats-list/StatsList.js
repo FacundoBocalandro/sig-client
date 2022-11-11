@@ -10,18 +10,25 @@ import {
     TableRow, TextField,
 } from '@mui/material';
 import {useCallback, useState} from "react";
-import _ from 'lodash';
+import _, {round} from 'lodash';
+import {AveragePill} from "./AveragePill";
+
+const SENSE = {
+    STABLE: "STABLE",
+    GROWING: "GROWING",
+    DECREASING: "DECREASING"
+}
 
 const KPIS = [
-    {accessor: 'weeklyServices', label: "Cerdas servidas"},
-    {accessor: 'pregnancyPercentage', label: "Preñez"},
-    {accessor: 'birthPerServicesPercentage', label: "Pariciones 1"},
-    {accessor: 'birthPerPregnancyPercentage', label: "Pariciones 2"},
-    {accessor: 'weeklyLivePigsPerBirth', label: "Nacimiento"},
-    {accessor: 'weeklyWeanedPerBirth', label: "Destetados"},
-    {accessor: 'weeklyDeathRate', label: "Mortandad"},
-    {accessor: 'weeklyBirthWeight', label: "Peso nacimiento"},
-    {accessor: 'weeklyWeanedWeight', label: "Peso destete"}
+    {accessor: 'weeklyServices', label: "Cerdas servidas", sense: SENSE.STABLE},
+    {accessor: 'pregnancyPercentage', label: "Preñez", sense: SENSE.GROWING},
+    {accessor: 'birthPerServicesPercentage', label: "Pariciones 1", sense: SENSE.GROWING},
+    {accessor: 'birthPerPregnancyPercentage', label: "Pariciones 2", sense: SENSE.GROWING},
+    {accessor: 'weeklyLivePigsPerBirth', label: "Nacimiento", sense: SENSE.GROWING},
+    {accessor: 'weeklyWeanedPerBirth', label: "Destetados", sense: SENSE.GROWING},
+    {accessor: 'weeklyDeathRate', label: "Mortandad", sense: SENSE.DECREASING},
+    {accessor: 'weeklyBirthWeight', label: "Peso nacimiento", sense: SENSE.GROWING},
+    {accessor: 'weeklyWeanedWeight', label: "Peso destete", sense: SENSE.GROWING}
 ]
 
 export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
@@ -31,9 +38,9 @@ export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
         saveObjectives(newObjectives);
     }, 1000), []);
 
-    const changeObjectives = (newObjectives) => {
-        setTempObjectives(newObjectives);
-        debounceChangeObjectives(newObjectives);
+    const changeObjectives = (field, value) => {
+        setTempObjectives({...tempObjectives, [field]: value});
+        debounceChangeObjectives({[field]: value !== "" ? value : 0, id: tempObjectives.id});
     }
 
     return (
@@ -63,15 +70,18 @@ export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
                                     <TableRow>
                                         <TableCell sx={{position: 'sticky', left: 0, zIndex: 1, background: '#fff'}}><b>{kpi.label}</b></TableCell>
                                         {stats.statsPerWeek.map(stat => (
-                                            <TableCell align={"center"}>{stat[kpi.accessor]}</TableCell>))}
-                                        <TableCell align={"center"} sx={{position: 'sticky', right: '10%', zIndex: 1, background: '#fff'}}>{stats.average[kpi.accessor]}</TableCell>
+                                            <TableCell align={"center"}>{stat[kpi.accessor].toFixed(2)}</TableCell>))}
+                                        <TableCell align={"center"} sx={{position: 'sticky', right: '10%', zIndex: 1, background: '#fff'}}>
+                                            <AveragePill color={getStatusColor(round(Number(stats.average[kpi.accessor]), 2), Number(tempObjectives[kpi.accessor]), kpi.sense)}>{stats.average[kpi.accessor].toFixed(2)}</AveragePill>
+                                        </TableCell>
                                         <TableCell sx={{position: 'sticky', right: 0, zIndex: 1, background: '#fff'}}>
                                             <TextField
                                                 fullWidth
                                                 variant={"outlined"}
                                                 size={"small"}
                                                 type={"number"}
-                                                onChange={e => changeObjectives({...tempObjectives, [kpi.accessor]: e.target.value})}
+                                                onChange={e => changeObjectives(kpi.accessor, e.target.value)}
+                                                onBlur={e => saveObjectives({[kpi.accessor]: e.target.value !== "" ? e.target.value : 0, id: tempObjectives.id})}
                                                 value={tempObjectives[kpi.accessor]}/>
                                         </TableCell>
                                     </TableRow>
@@ -84,3 +94,16 @@ export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
         </Card>
     );
 };
+
+const getStatusColor = (average, objective, sense) => {
+    switch (sense) {
+        case SENSE.GROWING:
+            return average > objective ? 'success' : 'error';
+        case SENSE.DECREASING:
+            return average < objective ? 'success' : 'error';
+        case SENSE.STABLE:
+            return Math.abs(average - objective) < 2 ? 'success' : 'error';
+        default:
+            return 'info';
+    }
+}

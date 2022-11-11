@@ -21,7 +21,7 @@ export const calculateFullAgeString = (dob) => {
             age += '1 mes '
             break;
         default:
-            age += `${years} meses `;
+            age += `${months} meses `;
             break;
     }
     switch (days) {
