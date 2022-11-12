@@ -180,6 +180,12 @@ export const theme = createTheme({
             dark: '#0B79D0',
             contrastText: '#FFFFFF'
         },
+        black: {
+            main: '#000000',
+            light: '#000000',
+            dark: '#000000',
+            contrastText: '#FFFFFF'
+        },
         warning: {
             main: '#FFB020',
             light: '#FFBF4C',
@@ -187,7 +193,7 @@ export const theme = createTheme({
             contrastText: '#FFFFFF'
         },
         error: {
-            main: '#D14343',
+            main: '#c56363',
             light: '#DA6868',
             dark: '#922E2E',
             contrastText: '#FFFFFF'

@@ -57,9 +57,9 @@ const Pigs = () => {
         navigate(`/cerdas/${pig.id}`)
     }
 
-    const pigIsInFilter = (pig, text) => pig.pigId.toLowerCase().includes(text.toLowerCase()) ||
-        pig.fatherId.toLowerCase().includes(text.toLowerCase()) ||
-        pig.genetics.toLowerCase().includes(text.toLowerCase())
+    const pigIsInFilter = (pig, text) => {
+        return pig.pigId.toLowerCase().includes(text.toLowerCase());
+    }
 
     const handleSearch = (text) => {
         setSearchText(text);

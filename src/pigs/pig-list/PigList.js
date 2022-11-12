@@ -27,15 +27,17 @@ export const PIG_STATUS = {
 const STATUS_COLORS = {
     CUB: "secondary",
     IN_CYCLE: "info",
-    PREGNANT: "success",
-    RECENT_BIRTH: "warning",
-    DISCARDED: "error"
+    PREGNANT: "warning",
+    IN_BIRTH: "error",
+    RECENT_BIRTH: "secondary",
+    DISCARDED: "black"
 }
 
 const STATUS_LABELS = {
     CUB: "Cachorra",
     IN_CYCLE: "En ciclo",
     PREGNANT: "Preñada",
+    IN_BIRTH: 'Parida',
     RECENT_BIRTH: "Parto reciente",
     DISCARDED: "Descartada"
 }

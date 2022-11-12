@@ -8,7 +8,7 @@ import axios from 'axios';
 const httpClient = axios.create();
 httpClient.defaults.timeout = 1200000;
 
-// const baseUrl = "https://sig-api-seguimiento.fly.dev/"
+// const baseUrl = "https://sig-api-cerdas.fly.dev/"
 const baseUrl = "http://localhost:4000/"
 
 const HttpContext = createContext(null);
