@@ -81,6 +81,11 @@ export const StatsList = ({stats, objectives, saveObjectives, ...rest}) => {
                                                 size={"small"}
                                                 type={"number"}
                                                 inputProps={{min: 0}}
+                                                onKeyPress={(e) => {
+                                                    if (e.code === 'Minus') {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                                 onChange={e => changeObjectives(kpi.accessor, e.target.value)}
                                                 onBlur={e => saveObjectives({[kpi.accessor]: e.target.value !== "" ? e.target.value : 0, id: tempObjectives.id})}
                                                 value={tempObjectives[kpi.accessor]}/>
