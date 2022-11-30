@@ -42,10 +42,9 @@ const STATUS_LABELS = {
     DISCARDED: "Descartada"
 }
 
-export const PigList = ({ pigs, ...rest }) => {
+export const PigList = ({ pigs, page, setPage, ...rest }) => {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(20);
-    const [page, setPage] = useState(0);
 
     const handleLimitChange = (event) => {
         setLimit(event.target.value);

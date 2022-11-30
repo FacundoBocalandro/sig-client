@@ -12,6 +12,7 @@ import {useNavigate} from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const Pigs = () => {
+    const [page, setPage] = useState(0);
     const {get} = useHttp();
     const {isAuthenticated} = useAuthentication();
     const [pigs, setPigs] = useState([]);
@@ -19,6 +20,7 @@ const Pigs = () => {
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [activeStatusFilters, setActiveStatusFilters] = useState([]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -51,19 +53,28 @@ const Pigs = () => {
         setLoading(false);
         const age = calculateFullAgeString(pig.birthDate);
         setPigs([{...pig, age}, ...pigs]);
-        if (pigIsInFilter(pig, searchText)) {
+        if (pigIsInFilter(pig, searchText, activeStatusFilters)) {
             setFilteredPigs([{...pig, age}, ...filteredPigs]);
         }
         navigate(`/cerdas/${pig.id}`)
     }
 
-    const pigIsInFilter = (pig, text) => {
-        return pig.pigId.toLowerCase().includes(text.toLowerCase());
+    const pigIsInFilter = (pig, text, statusFilters) => {
+
+        return pig.pigId.toLowerCase().includes(text.toLowerCase()) && (statusFilters.length === 0 || statusFilters.some(filter => filter === pig.pigStatus));
     }
 
     const handleSearch = (text) => {
         setSearchText(text);
-        setFilteredPigs(pigs.filter(pig => pigIsInFilter(pig, text)));
+        if (page !== 0) setPage(0);
+        setFilteredPigs(pigs.filter(pig => pigIsInFilter(pig, text, activeStatusFilters)));
+    }
+
+    const handleFilter = (newFilter) => {
+        const newActiveStatusFilters = activeStatusFilters.includes(newFilter) ? activeStatusFilters.filter(filter => filter !== newFilter) : [...activeStatusFilters, newFilter];
+        setActiveStatusFilters(newActiveStatusFilters);
+        if (page !== 0) setPage(0);
+        setFilteredPigs(pigs.filter(pig => pigIsInFilter(pig, searchText, newActiveStatusFilters)));
     }
 
     return (
@@ -79,11 +90,11 @@ const Pigs = () => {
                 }}
             >
                 <Container maxWidth={false}>
-                    <PigListToolbar handleOpen={handleOpen} handleSearch={handleSearch} searchText={searchText}/>
+                    <PigListToolbar handleOpen={handleOpen} handleSearch={handleSearch} searchText={searchText} handleFilter={handleFilter} activeStatusFilters={activeStatusFilters}/>
                     <AddPigModal open={open} handleClose={handleClose} addPigCallback={addPigCallback}
                                  setLoading={setLoading}/>
                     <Box sx={{mt: 3}}>
-                        <PigList pigs={filteredPigs}/>
+                        <PigList pigs={filteredPigs} page={page} setPage={setPage}/>
                     </Box>
                 </Container>
             </Box>
